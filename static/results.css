@@ -50,3 +50,25 @@ li {
     background-color: white;
 }
 
+#recipes {
+    display: flex;
+}
+
+#recipe-display {
+    background-color: white;
+    border-radius: 5px;
+    width: 50%;
+    margin: 5%;
+    padding: 2% 5%;
+    height: fit-content;
+}
+
+#display-recipe > ul{
+    padding: 0;
+    width: 100%;
+}
+
+#display-recipe > ul > li{
+    padding: 1%;
+    margin: 1%;
+}

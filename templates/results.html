@@ -11,8 +11,6 @@
         <h1>Recipe Recommender!</h1>
     </div>
     <div id="content">
-        <h1>Recommended Recipes</h1>
-        
         {% if recipes["Ingredients Available"] %}
             <h2>Your Ingredients:</h2>
             <h3 id="ingredients">{{ recipes["Ingredients Available"] }}</h3>
@@ -21,22 +19,52 @@
         {% endif %}
         
         <h2>Recipe Suggestions For Your Ingredients!</h2>
-        <ul>
-            {% if recipes["Recommended Recipes"] %}
-                {% for recipeDetails in recipes["Recommended Recipes"] %}
-                    {% for recipe, details in recipeDetails.items() %}
-                        <li>
-                            <strong>{{ recipe }}</strong><br><br>
-                            Ingredients: {{ details.ingredients | join(", ") }}<br><br>
-                            Instructions: {{ details.instructions }}
-                        </li>
+        <div id="recipes">
+            <ul>
+                {% if recipes["Recommended Recipes"] %}
+                    {% for recipeDetails in recipes["Recommended Recipes"] %}
+                        {% for recipe, details in recipeDetails.items() %}
+                            <li onclick="showRecipe(this)" 
+                                data-ingredients="{{ details.ingredients | join(', ') }}"
+                                data-instructions="{{ details.instructions }}">
+                                <h3>{{ recipe }}</h3>
+                                <p>{{ details.ingredients | join(', ') }}</p>
+                            </li>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            {% else %}
-                <li>No recipes found.</li>
-            {% endif %}
-        </ul>
+                {% else %}
+                    <li>No recipes found.</li>
+                {% endif %}
+            </ul>
+            <div id="recipe-display">
+                <h2 id="title">Click on a recipe for instructions!</h2>
+                <p id="display-ingredients"></p>
+                <div id="display-recipe"></div>
+            </div>
+        </div>
     </div>
-    
+<script>
+    function showRecipe(element) {
+    // Get ingredients and instructions from data attributes
+    const recipeName = element.querySelector("h3").textContent;
+    const instructions = element.getAttribute("data-instructions");
+
+    document.getElementById("title").textContent = `${recipeName}`;
+
+    const instructionSteps = instructions.split(".").filter(step => step.trim() !== "");
+    const instructionList = document.createElement("ul");
+
+    instructionSteps.forEach(step => {
+        const listItem = document.createElement("li");
+        listItem.textContent = step.trim();  // Trim any whitespace
+        instructionList.appendChild(listItem);
+    });
+
+    // Clear previous instructions and add the new list
+    const displayRecipe = document.getElementById("display-recipe");
+    displayRecipe.innerHTML = "";  // Clear previous content
+    displayRecipe.appendChild(instructionList);
+}
+</script>
 </body>
 </html>
